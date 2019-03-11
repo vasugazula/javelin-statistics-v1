@@ -1,11 +1,11 @@
 {
-  "name": "blk-design-system-react",
+  "name": "javelin-statistics",
   "version": "1.0.0",
-  "description": "React version of BLK Design System by Creative Tim",
+  "description": "Anthem Javelin Statistics by Vasu Gazula",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/blk-design-system-react.git"
+    "url": "git+https://github.com/vasugazula/javelin-statistics-v1.git"
   },
   "keywords": [
     "react",
@@ -25,12 +25,12 @@
     "blk-design-system",
     "blk-design-system-react"
   ],
-  "author": "Creative Tim",
+  "author": "Vasu Gazula",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/blk-design-system-react/issues"
+    "url": "https://github.com/vasugazula/javelin-statistics-v1/issues"
   },
-  "homepage": "https://github.com/creativetimofficial/blk-design-system-react#readme",
+  "homepage": "http://vasugazula.github.io/javelin-statistics",
   "dependencies": {
     "chart.js": "2.7.3",
     "classnames": "2.2.6",
@@ -55,7 +55,9 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "compile-sass": "node-sass src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.css",
     "minify-sass": "node-sass src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.min.css --output-style compressed",
-    "map-sass": "node-sass src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.css --source-map true"
+    "map-sass": "node-sass src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.css --source-map true",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -65,5 +67,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  }
 }
