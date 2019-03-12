@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/vasugazula/javelin-statistics-v1/issues"
   },
-  "homepage": "http://vasugazula.github.io/javelin-statistics",
+  "homepage": ".",
   "dependencies": {
     "chart.js": "2.7.3",
     "classnames": "2.2.6",
@@ -43,6 +43,7 @@
     "react-chartjs-2": "2.7.4",
     "react-datetime": "2.16.3",
     "react-dom": "16.8.3",
+    "react-numeric-input": "^2.2.3",
     "react-router-dom": "4.3.1",
     "react-scripts": "2.1.5",
     "reactstrap": "7.1.0"
@@ -56,8 +57,7 @@
     "compile-sass": "node-sass src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.css",
     "minify-sass": "node-sass src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.min.css --output-style compressed",
     "map-sass": "node-sass src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.css --source-map true",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "aws s3 sync build/ s3://javelin-statistics"
   },
   "eslintConfig": {
     "extends": "react-app"
