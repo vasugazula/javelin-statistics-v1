@@ -17,12 +17,42 @@ const properties = {
     {
       'name': 'Siege Breaker',
       'description': 'Upgraded Whirlwind: Combination of assault and sniper rifles.',
-      'special': 'On a hit-streak (3), shots freeze the target.'
+      'special': 'On a hit-streak (3), shots freeze the target.',
+      inscriptions: [
+        {
+          type: "gear",
+          percentage: 10,
+          description: "Mks Rifle +{X}% Dmg"
+        },
+        {type: "suit",
+          percentage: 10,
+          description: "Mks Rifle +{X}% Dmg"},
+        {type: "gear",
+          percentage: 10,
+          description: "Mks Rifle +{X}% Dmg"},
+        {type: "gear",
+          percentage: 10,
+          description: "Mks Rifle +{X}% Dmg"}]
     },
     {
       'name': 'Papa Pump',
       'description': 'Upgraded Scattershot: Standard-issue lancer shotgun. ',
-      'special': 'Reloading increases force and delivers bonus damage of 100% for 15 seconds. Stacks to 2.'
+      'special': 'Reloading increases force and delivers bonus damage of 100% for 15 seconds. Stacks to 2.',
+      inscriptions: [
+        {
+          type: "gear",
+          percentage: 10,
+          description: "Mks Rifle +{X}% Dmg"
+        },
+        {type: "suit",
+          percentage: 10,
+          description: "Mks Rifle +{X}% Dmg"},
+        {type: "gear",
+          percentage: 10,
+          description: "Mks Rifle +{X}% Dmg"},
+        {type: "gear",
+          percentage: 10,
+          description: "Mks Rifle +{X}% Dmg"}]
     }
   ],
   inscriptions: ["LB/Q +{X}% Dmg",
