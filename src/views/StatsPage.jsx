@@ -26,7 +26,23 @@ class StatsPage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      weapon1: {},
+      weapon1: {
+        inscriptions: [
+          {
+            type: "gear",
+            percentage: 10,
+            description: "Mks Rifle +{X}% Dmg"
+          },
+          {type: "gear",
+            percentage: 10,
+            description: "Mks Rifle +{X}% Dmg"},
+          {type: "gear",
+            percentage: 10,
+            description: "Mks Rifle +{X}% Dmg"},
+          {type: "gear",
+            percentage: 10,
+            description: "Mks Rifle +{X}% Dmg"}]
+      },
       weapon2: {},
       modalDemo: false,
       rSelected: 0
@@ -48,6 +64,15 @@ class StatsPage extends React.Component {
     let selectedWeapon = allWeapons.filter(value => value.name === e.target.innerText);
     console.log(selectedWeapon[0].name + ' ' + 'desc: ' + selectedWeapon[0].description + ' special ' + selectedWeapon[0].special);
     this.setState({weapon1 : selectedWeapon[0]});
+  }
+
+  updateItemState = (e) => {
+    console.log('This is my inscription: ' + e.target.innerText);
+    //this.setState({weapon1 : e.target.innerText});
+    this.state.weapon1.inscriptions[0].description = e.target.innerText;
+    let weapon1 = {...this.state.weapon1};
+    weapon1.inscriptions[0].description = e.target.innerText;
+    this.setState({weapon1});
   }
 
   weaponSelector2 = (e) => {
@@ -73,7 +98,7 @@ class StatsPage extends React.Component {
       return(<DropdownItem key={index} ref={this.dropDownSelection} onClick={this.weaponSelector}>{weap.name}</DropdownItem>)
     });
     let inscriptionDropdownItems = this.props.inscriptions.map((insc,index) => {
-      return(<DropdownItem key={index} ref={this.dropDownSelection} >{insc}</DropdownItem>)
+      return(<DropdownItem key={index} ref={this.dropDownSelection} onClick={this.updateItemState}>{insc}</DropdownItem>)
     });
     let weaponDropdownItems2 = this.props.weapons.map((weap,index) => {
       return(<DropdownItem key={index} ref={this.dropDownSelection} onClick={this.weaponSelector2}>{weap.name}</DropdownItem>)
@@ -136,68 +161,6 @@ class StatsPage extends React.Component {
                   <Button className="btn-round btn-icon" color="default" onClick={this.toggleModalDemo}>
                     <i className="tim-icons icon-notes" />
                   </Button>
-                  <Modal isOpen={this.state.modalDemo} toggle={this.toggleModalDemo} modalClassName="modal-black">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">
-                        Inscriptions
-                      </h5>
-                      <button
-                          type="button"
-                          className="close"
-                          data-dismiss="modal"
-                          aria-hidden="true"
-                          onClick={this.toggleModalDemo}
-                      >
-                        <i className="tim-icons icon-simple-remove" />
-                      </button>
-                    </div>
-                    <ModalBody>
-                      <ButtonGroup>
-                        <Button size="sm" onClick={() => this.onRadioBtnClick(1)}
-                                active={this.state.rSelected === 1}><img style={styles}
-                                                                         src={require("assets/img/gear-icon.png")}
-                                                                         alt="my image"/></Button>
-                        <Button size="sm" onClick={() => this.onRadioBtnClick(1)}
-                                active={this.state.rSelected === 1}><img style={styles}
-                                                                         src={require("assets/img/suit-icon.png")}
-                                                                         alt="my image"/></Button>
-                      </ButtonGroup>
-                      <br/>
-                      <br/>
-                      <NumericInput min={0} max={300} value={0}/>
-                      <br/>
-                      <br/>
-                      <UncontrolledDropdown group>
-                        <DropdownToggle caret data-toggle="dropdown">
-                          Select Inscription ...
-                        </DropdownToggle>
-                        <DropdownMenu
-                            modifiers={{
-                              setMaxHeight: {
-                                enabled: true,
-                                order: 890,
-                                fn: (data) => {
-                                  return {
-                                    ...data,
-                                    styles: {
-                                      ...data.styles,
-                                      overflow: 'auto',
-                                      maxHeight: 300,
-                                    },
-                                  };
-                                },
-                              },
-                            }} >
-                          {inscriptionDropdownItems}
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="primary">
-                        Save
-                      </Button>
-                    </ModalFooter>
-                  </Modal>
                 </Col>
                 <Col lg="6" md="6">
                   <h1 className="text-white">
@@ -209,12 +172,95 @@ class StatsPage extends React.Component {
                   <h4 className="text-warning">
                     {this.state.weapon1.special}
                   </h4>
+                  <Row className="row-grid justify-content-between align-items-start text-left">
+                    <Col>
+                      <h6>{this.state.weapon1.inscriptions[0].description}</h6>
+                    </Col>
+                    <Col>
+                      <h6>Inscription 1</h6>
+                    </Col>
+                  </Row>
+                  <br/>
+                  <Row className="row-grid justify-content-between align-items-start text-left">
+                    <Col>
+                      <h6>Inscription 1</h6>
+                    </Col>
+                    <Col>
+                      <h6>Inscription 1</h6>
+                    </Col>
+                  </Row>
+
+                  <br/>
                 </Col>
               </Row>
               <br/><br/><br/>
             </div>
           </div>
         </div>
+
+        <Modal isOpen={this.state.modalDemo} toggle={this.toggleModalDemo} modalClassName="modal-black">
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">
+              Inscriptions
+            </h5>
+            <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+                onClick={this.toggleModalDemo}
+            >
+              <i className="tim-icons icon-simple-remove"/>
+            </button>
+          </div>
+          <ModalBody>
+            <ButtonGroup>
+              <Button size="sm" onClick={() => this.onRadioBtnClick(1)}
+                      active={this.state.rSelected === 1}><img style={styles}
+                                                               src={require("assets/img/gear.png")}
+                                                               alt="my image"/></Button>
+              <Button size="sm" onClick={() => this.onRadioBtnClick(1)}
+                      active={this.state.rSelected === 1}><img style={styles}
+                                                               src={require("assets/img/suit.png")}
+                                                               alt="my image"/></Button>
+            </ButtonGroup>
+            <br/>
+            <br/>
+            <NumericInput min={0} max={300} value={0}/>
+            <br/>
+            <br/>
+            <UncontrolledDropdown group>
+              <DropdownToggle caret data-toggle="dropdown">
+                {this.state.weapon1.inscriptions[0].description}
+              </DropdownToggle>
+              <DropdownMenu
+                  modifiers={{
+                    setMaxHeight: {
+                      enabled: true,
+                      order: 890,
+                      fn: (data) => {
+                        return {
+                          ...data,
+                          styles: {
+                            ...data.styles,
+                            overflow: 'auto',
+                            maxHeight: 300,
+                          },
+                        };
+                      },
+                    },
+                  }}
+              >
+                {inscriptionDropdownItems}
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary">
+              Save
+            </Button>
+          </ModalFooter>
+        </Modal>
       </>
     );
   }
