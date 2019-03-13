@@ -17,6 +17,8 @@ import {
 } from "reactstrap";
 
 import NumericInput from 'react-numeric-input';
+import Slot from "components/Slot.jsx";
+import SlotSelector from "components/SlotSelector.jsx";
 
 // core components
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.jsx";
@@ -28,6 +30,7 @@ class StatsPage extends React.Component {
     super(props);
     this.state = {
       weapon1: {
+        wIndex: 1,
         inscriptions: [
             {
               type: "gear",
@@ -49,7 +52,29 @@ class StatsPage extends React.Component {
             }
         ]
       },
-      weapon2: {},
+        weapon2: {
+            wIndex: 2,
+            inscriptions: [
+                {
+                    type: "gear",
+                    percentage: 10,
+                    description: "Mks Rifle +{X}% Dmg"
+                },
+                {
+                    type: "suit",
+                    percentage: 10,
+                    description: "Mks Rifle +{X}% Dmg"},
+                {
+                    type: "gear",
+                    percentage: 10,
+                    description: "Mks Rifle +{X}% Dmg"},
+                {
+                    type: "gear",
+                    percentage: 10,
+                    description: "Mks Rifle +{X}% Dmg"
+                }
+            ]
+        },
       modalDemo: false,
       rSelected: 0
     };
@@ -76,27 +101,11 @@ class StatsPage extends React.Component {
     console.log('This is my weapon: ' + e.target.innerText);
     let allWeapons = this.props.weapons;
     let selectedWeapon = allWeapons.filter(value => value.name === e.target.innerText);
-    console.log(selectedWeapon[0].name + ' ' + 'desc: ' + selectedWeapon[0].description + ' special ' + selectedWeapon[0].special);
-    this.setState({weapon1 : selectedWeapon[0]});
+    console.log(selectedWeapon[0].name + ' ' + 'desc: ' + selectedWeapon[0].description + ' special ' + selectedWeapon[0].special + ' weaponIndex ' + e.target.parentElement.getAttribute("windex"));
+    let wIndex = Math.trunc(e.target.parentElement.getAttribute("windex"));
+    wIndex == 1 ? this.setState({weapon1 : selectedWeapon[0]}) : this.setState({weapon2 : selectedWeapon[0]});
   }
 
-  updateItemState = (e) => {
-    let inscrIndex = Math.trunc(e.target.getAttribute("inscription"));
-    console.log('This is my inscription: ' + e.target.innerText);
-    //this.setState({weapon1 : e.target.innerText});
-    this.state.weapon1.inscriptions[inscrIndex].description = e.target.innerText;
-    let weapon1 = {...this.state.weapon1};
-    weapon1.inscriptions[inscrIndex].description = e.target.innerText;
-    this.setState({weapon1});
-  }
-
-  weaponSelector2 = (e) => {
-    console.log('This is my weapon: ' + e.target.innerText);
-    let allWeapons = this.props.weapons;
-    let selectedWeapon = allWeapons.filter(value => value.name === e.target.innerText);
-    console.log(selectedWeapon[0].name + ' ' + 'desc: ' + selectedWeapon[0].description + ' special ' + selectedWeapon[0].special);
-    this.setState({weapon2 : selectedWeapon[0]});
-  }
 
   toggleModalDemo(){
     this.setState({
@@ -104,14 +113,15 @@ class StatsPage extends React.Component {
     });
   }
 
+  //GEAR/JAVELIN
   onRadioBtnClick = (e) => {
-    debugger;
     let inscrIndex = Math.trunc(e.currentTarget.getAttribute("inscrindex"));
     let weapon1 = {...this.state.weapon1};
     weapon1.inscriptions[inscrIndex].type = e.currentTarget.getAttribute("type");
     this.setState({weapon1});
   }
 
+  //PERCENTAGE
   onPercentageChange = (event) =>{
     let inscrIndex = Math.trunc(event.target.getAttribute("inscrindex"));
     let weapon1 = {...this.state.weapon1};
@@ -119,25 +129,29 @@ class StatsPage extends React.Component {
     this.setState({weapon1});
   }
 
-  getInscriptionDescription(number){
-    let inscr = this.state.weapon1.inscriptions[number];
-    return inscr.description.replace("{X}", inscr.percentage);
+  //INSCRIPTION DESCRIPTION
+  updateItemState = (e) => {
+    let inscrIndex = Math.trunc(e.target.getAttribute("inscription"));
+    console.log('This is my inscription: ' + e.target.innerText);
+    this.state.weapon1.inscriptions[inscrIndex].description = e.target.innerText;
+    let weapon1 = {...this.state.weapon1};
+    weapon1.inscriptions[inscrIndex].description = e.target.innerText;
+    this.setState({weapon1});
   }
+
 
   render() {
     let weaponDropdownItems = this.props.weapons.map((weap,index) => {
       return(<DropdownItem key={index} ref={this.dropDownSelection} onClick={this.weaponSelector}>{weap.name}</DropdownItem>)
     });
-
     let originArr = [0,1,2,3];
-
     let inscriptionDropdownItemList = [];
 
     originArr.map( (val, index)  => {
       inscriptionDropdownItemList.push(this.props.inscriptions.map((insc,i) => {
         return(<DropdownItem key={i} ref={this.dropDownSelection} onClick={this.updateItemState} inscription={index}>{insc}</DropdownItem>)
       }));
-    })
+    });
 
     let styles = {
       width: '50px',
@@ -149,6 +163,7 @@ class StatsPage extends React.Component {
       height: '25px',
       display: 'inline-block',
     };
+
     return (
       <>
         <ExamplesNavbar />
@@ -186,67 +201,14 @@ class StatsPage extends React.Component {
             />
             <div className="content-center">
               <Row className="row-grid justify-content-between align-items-start text-left">
-                <Col lg="6" md="6">
-                  <h1 className="text-white">
-                    Weapon Slot 1
-                  </h1>
-                  <UncontrolledDropdown group>
-                    <DropdownToggle caret color="danger" data-toggle="dropdown">
-                      { this.state.weapon1.name ? this.state.weapon1.name : "Select your primary gun"}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      {weaponDropdownItems}
-                    </DropdownMenu>
-                  </UncontrolledDropdown>
-                  <br/>
-                  <Button className="btn-round btn-icon" color="default" onClick={this.toggleModalDemo}>
-                    <i className="tim-icons icon-notes" />
-                  </Button>
-                </Col>
-                <Col lg="6" md="6">
-                  <h1 className="text-white">
-                    {this.state.weapon1.name}
-                  </h1>
-                  <h4 className="text-white">
-                    {this.state.weapon1.description}
-                  </h4>
-                  <h4 className="text-warning">
-                    {this.state.weapon1.special}
-                  </h4>
-                  <Row className="row-grid justify-content-between align-items-start text-left">
-                    <Col>
-                      <Row>
-                        {this.state.weapon1.inscriptions[0].type == "gear" ? <img style={styles2} src={require("assets/img/gear.png")} alt="my image"/>: <img style={styles2} src={require("assets/img/suit.png")} alt="my image"/>}
-                        <h6>{this.getInscriptionDescription(0)}</h6>
-                      </Row>
-                    </Col>
-                    <Col>
-                      <Row>
-                        {this.state.weapon1.inscriptions[1].type == "gear" ? <img style={styles2} src={require("assets/img/gear.png")} alt="my image"/>: <img style={styles2} src={require("assets/img/suit.png")} alt="my image"/>}
-                        <h6>{this.getInscriptionDescription(1)}</h6>
-                      </Row>
-                    </Col>
-                  </Row>
-                  <br/>
-                  <Row className="row-grid justify-content-between align-items-start text-left">
-                    <Col>
-                      <Row>
-                        {this.state.weapon1.inscriptions[2].type == "gear" ? <img style={styles2} src={require("assets/img/gear.png")} alt="my image"/>: <img style={styles2} src={require("assets/img/suit.png")} alt="my image"/>}
-                        <h6>{this.getInscriptionDescription(2)}</h6>
-                      </Row>
-                    </Col>
-                    <Col>
-                      <Row>
-                        {this.state.weapon1.inscriptions[3].type == "gear" ? <img style={styles2} src={require("assets/img/gear.png")} alt="my image"/>: <img style={styles2} src={require("assets/img/suit.png")} alt="my image"/>}
-                        <h6>{this.getInscriptionDescription(3)}</h6>
-                      </Row>
-                    </Col>
-                  </Row>
-
-                  <br/>
-                </Col>
+                  <SlotSelector slot={this.state.weapon1} weaponDropdownItems={weaponDropdownItems} inscriptionButtonHandler={this.toggleModalDemo} windex={1} />
+                  {this.state.weapon1 ? <Slot slot={this.state.weapon1}/> : null}
               </Row>
               <br/><br/><br/>
+                <Row className="row-grid justify-content-between align-items-start text-left">
+                    <SlotSelector slot={this.state.weapon2} weaponDropdownItems={weaponDropdownItems} inscriptionButtonHandler={this.toggleModalDemo} windex={2}/>
+                    {this.state.weapon2 ? <Slot slot={this.state.weapon2}/> : null}
+                </Row>
             </div>
           </div>
         </div>
@@ -450,8 +412,6 @@ class StatsPage extends React.Component {
       </>
     );
   }
-
-
 }
 
 export default StatsPage;
