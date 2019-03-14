@@ -3,26 +3,15 @@ import React from "react";
 // reactstrap components
 import {
   Row,
-  Col,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
   DropdownItem,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ButtonGroup
 } from "reactstrap";
 
-import NumericInput from 'react-numeric-input';
 import Slot from "components/Slot.jsx";
 import SlotSelector from "components/SlotSelector.jsx";
 
 // core components
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.jsx";
-import Nouislider from 'react-nouislider';
+import InscriptionModal from "../components/InscriptionModal";
 
 class StatsPage extends React.Component {
   dropDownSelection;
@@ -76,11 +65,11 @@ class StatsPage extends React.Component {
             ]
         },
       modalDemo: false,
+      modalItem: null,
       rSelected: 0
     };
-
-    this.toggleModalDemo = this.toggleModalDemo.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+    //this.toggleModalDemo = this.toggleModalDemo.bind(this);
   }
   componentDidMount() {
     let slider1 = this.refs.slider1;
@@ -106,10 +95,11 @@ class StatsPage extends React.Component {
     wIndex == 1 ? this.setState({weapon1 : selectedWeapon[0]}) : this.setState({weapon2 : selectedWeapon[0]});
   }
 
-
-  toggleModalDemo(){
+  toggleModalDemo = (slotItem, wIndex) =>{
     this.setState({
-      modalDemo: !this.state.modalDemo
+      modalDemo: !this.state.modalDemo,
+      modalItem: slotItem,
+      wIndex: wIndex
     });
   }
 
@@ -133,10 +123,18 @@ class StatsPage extends React.Component {
   updateItemState = (e) => {
     let inscrIndex = Math.trunc(e.target.getAttribute("inscription"));
     console.log('This is my inscription: ' + e.target.innerText);
-    this.state.weapon1.inscriptions[inscrIndex].description = e.target.innerText;
-    let weapon1 = {...this.state.weapon1};
-    weapon1.inscriptions[inscrIndex].description = e.target.innerText;
-    this.setState({weapon1});
+    debugger;
+    let wIndex = Math.trunc(e.target.parentElement.getAttribute("windex"));
+    if(wIndex == 1){
+      let weapon1 = {...this.state.weapon1};
+      weapon1.inscriptions[inscrIndex].description = e.target.innerText;
+      this.setState({weapon1});
+    }
+    else if(wIndex == 2){
+      let weapon2 = {...this.state.weapon2};
+      weapon2.inscriptions[inscrIndex].description = e.target.innerText;
+      this.setState({weapon2});
+    }
   }
 
 
@@ -201,214 +199,19 @@ class StatsPage extends React.Component {
             />
             <div className="content-center">
               <Row className="row-grid justify-content-between align-items-start text-left">
-                  <SlotSelector slot={this.state.weapon1} weaponDropdownItems={weaponDropdownItems} inscriptionButtonHandler={this.toggleModalDemo} windex={1} />
+                  <SlotSelector slot={this.state.weapon1} weaponDropdownItems={weaponDropdownItems} inscriptionButtonHandler={() => this.toggleModalDemo(this.state.weapon1,1)} windex={1} />
                   {this.state.weapon1 ? <Slot slot={this.state.weapon1}/> : null}
               </Row>
               <br/><br/><br/>
                 <Row className="row-grid justify-content-between align-items-start text-left">
-                    <SlotSelector slot={this.state.weapon2} weaponDropdownItems={weaponDropdownItems} inscriptionButtonHandler={this.toggleModalDemo} windex={2}/>
+                    <SlotSelector slot={this.state.weapon2} weaponDropdownItems={weaponDropdownItems} inscriptionButtonHandler={() => this.toggleModalDemo(this.state.weapon2,2)} windex={2}/>
                     {this.state.weapon2 ? <Slot slot={this.state.weapon2}/> : null}
                 </Row>
             </div>
           </div>
         </div>
+        <InscriptionModal slot={this.state.weapon1} modalItem={this.state.modalItem} modalDemo={this.state.modalDemo} inscriptionDropdownItemList={inscriptionDropdownItemList}/>
 
-        <Modal isOpen={this.state.modalDemo} toggle={this.toggleModalDemo} modalClassName="modal-black">
-          <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">
-              Inscriptions
-            </h5>
-            <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-                onClick={this.toggleModalDemo}
-            >
-              <i className="tim-icons icon-simple-remove"/>
-            </button>
-          </div>
-          <ModalBody>
-            <Row>
-              <Col>
-                <ButtonGroup>
-                  <Button size="sm" onClick={this.onRadioBtnClick} inscrindex={0} type={"gear"}
-                          active={this.state.rSelected === 1}><img style={styles}
-                                                                   src={require("assets/img/gear.png")}
-                                                                   alt="my image"/></Button>
-                  <Button size="sm" onClick={this.onRadioBtnClick} inscrindex={0} type={"suit"}
-                          active={this.state.rSelected === 1}><img style={styles}
-                                                                   src={require("assets/img/suit.png")}
-                                                                   alt="my image"/></Button>
-                </ButtonGroup>
-                <br/>
-                <br/>
-                <NumericInput min={0} max={300} value={this.state.weapon1.inscriptions[0].percentage} onBlur={this.onPercentageChange} inscrindex={0}/>
-                <br/>
-                <br/>
-                <UncontrolledDropdown group>
-                  <DropdownToggle caret data-toggle="dropdown">
-                    {this.state.weapon1.inscriptions[0].description}
-                  </DropdownToggle>
-                  <DropdownMenu
-                      modifiers={{
-                        setMaxHeight: {
-                          enabled: true,
-                          order: 890,
-                          fn: (data) => {
-                            return {
-                              ...data,
-                              styles: {
-                                ...data.styles,
-                                overflow: 'auto',
-                                maxHeight: 300,
-                              },
-                            };
-                          },
-                        },
-                      }}
-                  >
-                    {inscriptionDropdownItemList[0]}
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-              </Col>
-              <Col>
-                <ButtonGroup>
-                  <Button size="sm" onClick={this.onRadioBtnClick} inscrindex={1} type={"gear"}
-                          active={this.state.rSelected === 1}><img style={styles}
-                                                                   src={require("assets/img/gear.png")}
-                                                                   alt="my image"/></Button>
-                  <Button size="sm" onClick={this.onRadioBtnClick} inscrindex={1} type={"suit"}
-                          active={this.state.rSelected === 1}><img style={styles}
-                                                                   src={require("assets/img/suit.png")}
-                                                                   alt="my image"/></Button>
-                </ButtonGroup>
-                <br/>
-                <br/>
-                <NumericInput min={0} max={300} value={this.state.weapon1.inscriptions[1].percentage} onBlur={this.onPercentageChange} inscrindex={1}/>
-                <br/>
-                <br/>
-                <UncontrolledDropdown group>
-                  <DropdownToggle caret data-toggle="dropdown">
-                    {this.state.weapon1.inscriptions[1].description}
-                  </DropdownToggle>
-                  <DropdownMenu
-                      modifiers={{
-                        setMaxHeight: {
-                          enabled: true,
-                          order: 890,
-                          fn: (data) => {
-                            return {
-                              ...data,
-                              styles: {
-                                ...data.styles,
-                                overflow: 'auto',
-                                maxHeight: 300,
-                              },
-                            };
-                          },
-                        },
-                      }}
-                  >
-                    {inscriptionDropdownItemList[1]}
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <ButtonGroup>
-                  <Button size="sm" onClick={this.onRadioBtnClick} inscrindex={2} type={"gear"}
-                          active={this.state.rSelected === 1}><img style={styles}
-                                                                   src={require("assets/img/gear.png")}
-                                                                   alt="my image"/></Button>
-                  <Button size="sm" onClick={this.onRadioBtnClick} inscrindex={2} type={"suit"}
-                          active={this.state.rSelected === 1}><img style={styles}
-                                                                   src={require("assets/img/suit.png")}
-                                                                   alt="my image"/></Button>
-                </ButtonGroup>
-                <br/>
-                <br/>
-                <NumericInput min={0} max={300} value={this.state.weapon1.inscriptions[2].percentage} onBlur={this.onPercentageChange} inscrindex={2}/>
-                <br/>
-                <br/>
-                <UncontrolledDropdown group>
-                  <DropdownToggle caret data-toggle="dropdown">
-                    {this.state.weapon1.inscriptions[2].description}
-                  </DropdownToggle>
-                  <DropdownMenu
-                      modifiers={{
-                        setMaxHeight: {
-                          enabled: true,
-                          order: 890,
-                          fn: (data) => {
-                            return {
-                              ...data,
-                              styles: {
-                                ...data.styles,
-                                overflow: 'auto',
-                                maxHeight: 300,
-                              },
-                            };
-                          },
-                        },
-                      }}
-                  >
-                    {inscriptionDropdownItemList[2]}
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-              </Col>
-              <Col>
-                <ButtonGroup>
-                  <Button size="sm" onClick={this.onRadioBtnClick} type={"gear"} inscrindex={3}
-                          active={this.state.rSelected === 1}><img style={styles}
-                                                                   src={require("assets/img/gear.png")}
-                                                                   alt="my image"/></Button>
-                  <Button size="sm" onClick={this.onRadioBtnClick} type={"suit"} inscrindex={3}
-                          active={this.state.rSelected === 1}><img style={styles}
-                                                                   src={require("assets/img/suit.png")}
-                                                                   alt="my image"/></Button>
-                </ButtonGroup>
-                <br/>
-                <br/>
-                <NumericInput min={0} max={300} value={this.state.weapon1.inscriptions[3].percentage} onBlur={this.onPercentageChange} inscrindex={3}/>
-                <br/>
-                <br/>
-                <UncontrolledDropdown group>
-                  <DropdownToggle caret data-toggle="dropdown">
-                    {this.state.weapon1.inscriptions[3].description}
-                  </DropdownToggle>
-                  <DropdownMenu
-                      modifiers={{
-                        setMaxHeight: {
-                          enabled: true,
-                          order: 890,
-                          fn: (data) => {
-                            return {
-                              ...data,
-                              styles: {
-                                ...data.styles,
-                                overflow: 'auto',
-                                maxHeight: 300,
-                              },
-                            };
-                          },
-                        },
-                      }}
-                  >
-                    {inscriptionDropdownItemList[3]}
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-              </Col>
-            </Row>
-
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary">
-              Save
-            </Button>
-          </ModalFooter>
-        </Modal>
       </>
     );
   }
