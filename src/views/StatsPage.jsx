@@ -96,10 +96,10 @@ class StatsPage extends React.Component {
   }
 
   toggleModalDemo = (slotItem, wIndex) =>{
+    slotItem.wIndex = wIndex;
     this.setState({
       modalDemo: !this.state.modalDemo,
-      modalItem: slotItem,
-      wIndex: wIndex
+      modalItem: slotItem
     });
   }
 

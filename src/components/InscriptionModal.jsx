@@ -69,7 +69,7 @@ class InscriptionModal extends React.Component {
                                 <DropdownToggle caret data-toggle="dropdown">
                                     {this.props.slot.inscriptions[0].description}
                                 </DropdownToggle>
-                                <DropdownMenu windex={(this.props.wIndex) ? this.props.wIndex : 0}
+                                <DropdownMenu windex={(this.props.modalItem && this.props.modalItem.wIndex) ? this.props.modalItem.wIndex : 0}
                                     modifiers={{
                                         setMaxHeight: {
                                             enabled: true,
@@ -111,7 +111,7 @@ class InscriptionModal extends React.Component {
                                 <DropdownToggle caret data-toggle="dropdown">
                                     {this.props.slot.inscriptions[1].description}
                                 </DropdownToggle>
-                                <DropdownMenu windex={(this.props.wIndex) ? this.props.wIndex : 0}
+                                <DropdownMenu windex={(this.props.modalItem && this.props.modalItem.wIndex) ? this.props.modalItem.wIndex : 0}
                                     modifiers={{
                                         setMaxHeight: {
                                             enabled: true,
@@ -155,7 +155,7 @@ class InscriptionModal extends React.Component {
                                 <DropdownToggle caret data-toggle="dropdown">
                                     {this.props.slot.inscriptions[2].description}
                                 </DropdownToggle >
-                                <DropdownMenu windex={(this.props.wIndex) ? this.props.wIndex : 0}
+                                <DropdownMenu windex={(this.props.modalItem && this.props.modalItem.wIndex) ? this.props.modalItem.wIndex : 0}
                                     modifiers={{
                                         setMaxHeight: {
                                             enabled: true,
@@ -197,7 +197,7 @@ class InscriptionModal extends React.Component {
                                 <DropdownToggle caret data-toggle="dropdown">
                                     {this.props.slot.inscriptions[3].description}
                                 </DropdownToggle>
-                                <DropdownMenu windex={(this.props.wIndex) ? this.props.wIndex : 0}
+                                <DropdownMenu windex={(this.props.modalItem && this.props.modalItem.wIndex) ? this.props.modalItem.wIndex : 0}
                                     modifiers={{
                                         setMaxHeight: {
                                             enabled: true,
